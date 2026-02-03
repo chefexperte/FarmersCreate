@@ -1,11 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "farmers-create",
+  "id": "farmerscreate",
   "version": "${version}",
   "name": "FarmersCreate",
-  "description": "",
-  "authors": [],
-  "contact": {},
+  "description": "Compat mod between Farmer's Delight cutting/cooking recipes and Create",
+  "authors": [
+    "ChefExperte"
+  ],
+  "contact": {
+    "email": "aaron+minecraft@chefexperte.de",
+    "sources": "https://github.com/ChefExperte/FarmersCreate",
+    "issues": "https://github.com/ChefExperte/FarmersCreate/issues"
+  },
   "license": "AGPL-3.0",
   "icon": "assets/farmerscreate/icon.png",
   "environment": "*",

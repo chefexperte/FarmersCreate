@@ -6,6 +6,7 @@ import com.zurrtum.create.content.processing.recipe.HeatCondition;
 import com.zurrtum.create.content.processing.recipe.SizedIngredient;
 import com.zurrtum.create.infrastructure.fluids.FluidStack;
 import de.chefexperte.farmersCreate.FarmersCreate;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -21,13 +22,12 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe;
 import vectorwing.farmersdelight.common.registry.ModRecipeTypes;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
+
     @Shadow
     private RecipeMap recipes;
 
@@ -36,7 +36,7 @@ public class RecipeManagerMixin {
         var allRecipes = new ArrayList<>(recipeMap.values());
         // Get Farmer's Delight Cutting Board Recipes
         Collection<RecipeHolder<CuttingBoardRecipe>> cuttingBoardRecipes = recipeMap.byType(ModRecipeTypes.CUTTING.get()).stream().toList();
-        System.out.println("Found " + cuttingBoardRecipes.size() + "Farmer's Delight Cutting Board Recipes");
+        System.out.println("Found " + cuttingBoardRecipes.size() + " Farmer's Delight Cutting Board Recipes");
         for (var cuttingBoardRecipeHolder : cuttingBoardRecipes) {
             var cuttingBoardRecipe = cuttingBoardRecipeHolder.value();
             var cuttingRecipe = new DeployerApplicationRecipe(cuttingBoardRecipe.getResults().getFirst(), true, cuttingBoardRecipe.getInput(), cuttingBoardRecipe.getTool());
@@ -49,10 +49,46 @@ public class RecipeManagerMixin {
         }
         // Get Farmer's Delight Cooking Recipes
         Collection<RecipeHolder<CookingPotRecipe>> cookingRecipes = recipeMap.byType(ModRecipeTypes.COOKING.get()).stream().toList();
-        System.out.println("Found " + cookingRecipes.size() + "Farmer's Delight Cooking Recipes");
+        System.out.println("Found " + cookingRecipes.size() + " Farmer's Delight Cooking Recipes");
+        for (var tag : BuiltInRegistries.ITEM.getTags().toList()) {
+            System.out.println("Found tag: " + tag);
+        }
         for (var cookingRecipeHolder : cookingRecipes) {
             var cookingRecipe = cookingRecipeHolder.value();
-            var ingredients = SizedIngredient.of(cookingRecipe.input());
+            var recipeId = cookingRecipeHolder.id().identifier().toString();
+            var skipRecipe = false;
+            var cleanInput = new ArrayList<Ingredient>(cookingRecipe.input().size());
+            // Check ingredients for CustomingredientImpl because ZurrTum Create fork does not support it for 1.21.11
+            for (var ingredient : cookingRecipe.input()) {
+                var customIngredient = ingredient.getCustomIngredient();
+                if (customIngredient == null) {
+                    cleanInput.add(ingredient);
+                    continue;
+                }
+                // Filter out known recipes, they have been manually added
+                switch (recipeId) {
+                    case "farmersdelight:cooking/bone_broth":
+                        // Does not work, idk why
+                        //cleanInput.add(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(FarmersCreate.BONE_BROTH_INGREDIENTS_TAG)));
+                        skipRecipe = true;
+                        break;
+                    case "farmersdelight:cooking/dumplings":
+                        // Does not work, idk why
+                        //cleanInput.add(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(FarmersCreate.DUMPLINGS_INGREDIENTS_TAG)));
+                        skipRecipe = true;
+                        break;
+                    default:
+                        System.out.println("The \"" + recipeId + "\" recipe uses custom ingredients, which is not compatible with ZurrTums Create fork for 1.21.11. Please report this to the FarmersCreate developer.");
+                        skipRecipe = true;
+                }
+                if (skipRecipe) {
+                    break;
+                }
+            }
+            if (skipRecipe) {
+                continue;
+            }
+            var ingredients = SizedIngredient.of(cleanInput);
             var mixingRecipe = new MixingRecipe(cookingRecipe.result(), FluidStack.EMPTY, HeatCondition.HEATED, new ArrayList<>(), ingredients);
             var namespace = cookingRecipeHolder.id().identifier().getNamespace();
             var path = cookingRecipeHolder.id().identifier().getPath();

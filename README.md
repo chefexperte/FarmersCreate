@@ -19,7 +19,7 @@ incompatibilities here if any are found.
 
 ![Example of an addon recipe](media/addon_example.png)
 
-![Example video](media/example_video.mp4)
+[![Watch the video]()](media/example_video.mp4)
 
 ## How it works
 This mod uses Mixins to 

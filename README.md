@@ -11,6 +11,16 @@ It automatically adds a heated mixing recipe for every Farmer's Delight cooking 
 Since the mod dynamically creates recipes on the fly, it should work with any addon. I will note known 
 incompatibilities here if any are found.
 
+## Example gallery
+
+![Example of a cutting board recipe](media/cutting_example.png)
+
+![Example of a mixing recipe](media/cooking_example.png)
+
+![Example of an addon recipe](media/addon_example.png)
+
+![Example video](media/example_video.mp4)
+
 ## How it works
 This mod uses Mixins to 
 - hook into the recipe registration process to add the recipes.

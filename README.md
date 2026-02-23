@@ -19,7 +19,7 @@ incompatibilities here if any are found.
 
 ![Example of an addon recipe](media/addon_example.png)
 
-[![Watch the video](https://raw.githubusercontent.com/chefexperte/FarmersCreate/main/media/example_video_thumbnail.jpg)](https://raw.githubusercontent.com/chefexperte/FarmersCreate/main/media/example_video.mp4)
+https://github.com/user-attachments/assets/c35913ea-ed15-473f-b161-f16f1167c4bd
 
 ## How it works
 This mod uses Mixins to 

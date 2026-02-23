@@ -12,7 +12,6 @@
     "requireAnnotations": true
   },
   "mixins": [
-    "RecipeManagerMixin",
-    "BeltDeployerCallbacksMixin"
+    "RecipeManagerMixin"
   ]
 }

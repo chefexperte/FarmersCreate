@@ -38,6 +38,6 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "farmersdelight": ">=1.21.11-3.4.1",
-    "create": ">=1.21.11-6.0.8-2 <=6.0.9-2"
+    "create": ">=6.0.9-3"
   }
 }
